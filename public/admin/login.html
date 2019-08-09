@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Sign in &laquo; Admin</title>
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+  <div class="login">
+    <div class="login-wrap">
+      <img class="avatar" src="../assets/img/default.png">
+      <!-- 有错误信息时展示 -->
+      <div class="alert alert-danger" id="error" style="display: none">
+        <strong>错误！</strong> <span id="msg"></span>
+      </div>
+      <div class="form-group">
+        <label for="email" class="sr-only">邮箱</label>
+        <input id="email" type="email" class="form-control" placeholder="邮箱" autofocus value="">
+      </div>
+      <div class="form-group">
+        <label for="pwd" class="sr-only">密码</label>
+        <input id="pwd" type="password" class="form-control" placeholder="密码">
+      </div>
+      <button class="btn btn-primary btn-block" id="login">登 录</button>
+    </div>
+  </div>
+  <script src="../assets/vendors/jquery/jquery.min.js"></script>
+  <script>
+      $('#login').on('click', function() {
+        //邮箱内容
+        let email = $('#email').val();
+        let pwd = $('#pwd').val();
+        let emailReg = /\w+[@]\w+[.]\w+/;
+        let pwdReg = /\w{4,18}/;
+        if(!emailReg.test(email)) {
+          $('#error').fadeIn(1500).delay(1000).fadeOut(1000);
+          $('#msg').html('邮箱非法')
+        }
+        if(!pwdReg.test(pwd)) {
+          $('#error').fadeIn(1500).delay(1000).fadeOut(1000);
+          $('#msg').html('密码非法')
+        }
+        $.ajax({
+          type: 'POST',
+          url: '/login',
+          data: {
+            email: email,
+            password: pwd
+          },
+          success: function(res){
+            // console.log(res);   
+            location.href = 'index.html';
+          },
+          error: function() {
+            $('#error').fadeIn(1500).delay(1000).fadeOut(1000);
+            $('#msg').html('邮箱或密码不正确');
+            return
+          }
+        })
+      })
+  </script>
+</body>
+</html>
